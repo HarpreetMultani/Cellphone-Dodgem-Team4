@@ -48,6 +48,14 @@ class Location:
                 obs_y = self.player.obstacles[key][1]
                 if self.check_collision_obstacle(obs_x, obs_y, self.x, self.y, new_x_pos, new_y_pos):
                     return None
+        '''
+        if self.player.other_players and len(self.player.other_players) > 0:
+            for key in self.player.other_players.keys():
+                obs_x = self.player.other_players[key][0]
+                obs_y = self.player.other_players[key][1]
+                if self.check_collision_obstacle(obs_x, obs_y, self.x, self.y, new_x_pos, new_y_pos):
+                    return None
+        '''
 
         return Location(new_x_pos, new_y_pos, self.target_x, self.target_y, self, self.distance_travelled + 1, self.player)
 
@@ -160,6 +168,7 @@ class Player:
         self.T_theta = T_theta
         self.tsp_path = tsp_path
         self.num_players = num_players
+        self.lookup_counter = 10
 
         self.vx = random.random()
         self.vy = math.sqrt(1 - self.vx ** 2)
@@ -247,6 +256,7 @@ class Player:
             self.collision_counter = 9
         
         self.action = 'lookup'
+        self.lookup_counter = 10
         self.vx = random.random()
         self.vy = math.sqrt(1 - self.vx ** 2)
         self.sign_x *= -1
@@ -289,9 +299,15 @@ class Player:
     # simulator calls this function to get the action 'lookup' or 'move' from the player
     def get_action(self, pos_x, pos_y):
         # return 'lookup' or 'move'
-
+        self.lookup_counter -=1
         self.pos_x = pos_x
         self.pos_y = pos_y
+
+
+        if self.lookup_counter == 0:
+            self.lookup_counter = 10
+            self.other_players = {}
+            return "lookup"
 
         return self.action
 
