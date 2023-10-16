@@ -193,7 +193,7 @@ class Player:
         self.T_theta = T_theta
         self.tsp_path = tsp_path
         self.num_players = num_players
-        self.lookup_counter = 10
+        self.lookup_counter = 0
 
         self.vx = random.random()
         self.vy = math.sqrt(1 - self.vx ** 2)
@@ -276,7 +276,7 @@ class Player:
             self.collision_counter = 9
         
         self.action = 'lookup'
-        self.lookup_counter = 10
+        self.lookup_counter = 9
         self.vx = random.random()
         self.vy = math.sqrt(1 - self.vx ** 2)
         self.sign_x *= -1
@@ -296,7 +296,7 @@ class Player:
                 if (state.x, state.y) not in explored:
                     explored.add((state.x, state.y))
                     # return path once hit target
-                    if self.hit_goal(state) or state.distance_travelled >= 10:
+                    if self.hit_goal(state) or state.distance_travelled >= 5:
                         return self.get_path_to_goal(state)
                     for child_location in state.expand():
                         if (child_location.x, child_location.y) not in explored:
@@ -327,6 +327,8 @@ class Player:
             self.lookup_counter = 9
             self.other_players = {}
             return "lookup"
+        elif self.lookup_counter == 4:
+            self.A_star_obstacle_search
 
         return self.action
 
