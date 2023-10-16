@@ -220,6 +220,7 @@ class Player:
         self.tsp()
         self.queue_path()
         self.in_endgame = False
+        self.lookcounter = 0
 
     # initialize queue with stalls to visit from tsp in order
     def queue_path(self):
@@ -267,6 +268,8 @@ class Player:
         self.reroute = self.A_star_obstacle_search()
 
         self.action = 'move'
+        print("looking up: " + str(self.lookcounter))
+        self.lookcounter += 1
 
     # simulator calls this function when the player encounters an obstacle
     def encounter_obstacle(self):
@@ -322,8 +325,7 @@ class Player:
         self.pos_x = pos_x
         self.pos_y = pos_y
 
-
-        if self.lookup_counter == 0:
+        if self.lookup_counter == 0 and self.in_endgame == False:
             self.lookup_counter = 9
             self.other_players = {}
             return "lookup"
