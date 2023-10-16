@@ -153,32 +153,10 @@ class Player:
         
         self.pos = Vector(pos_x, pos_y) # update current position
         
-        return 'move'
+        vab = Vector(self.next_ckpt.x - pos_x, self.next_ckpt.y - pos_y)
+        return 'lookup' if self.__innerprod(vab, self.dir) < self.epsilon else 'move'
     
     # simulator calls this function to get the next move from the player
     # this function is called if the player returns 'move' as the action in the get_action function
     def get_next_move(self):
-        if self.pos_x <= 0:
-            self.sign_x = 1
-            self.vx = random.random()
-            self.vy = math.sqrt(1 - self.vx**2)
-
-        if self.pos_y <= 0:
-            self.sign_y = 1
-            self.vx = random.random()
-            self.vy = math.sqrt(1 - self.vx**2)
-
-        if self.pos_x >= 100:
-            self.sign_x = -1
-            self.vx = random.random()
-            self.vy = math.sqrt(1 - self.vx**2)
-
-        if self.pos_y >= 100:
-            self.sign_y = -1
-            self.vx = random.random()
-            self.vy = math.sqrt(1 - self.vx**2)
-
-        new_pos_x = self.pos_x + self.sign_x * self.vx
-        new_pos_y = self.pos_y + self.sign_y * self.vy
-
-        return new_pos_x, new_pos_y
+        return self.pos.x + self.dir.x, self.pos.y + self.dir.y
